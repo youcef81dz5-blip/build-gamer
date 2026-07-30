@@ -14,6 +14,7 @@ import {
 export interface Issue {
   level: "error" | "warning" | "info";
   message: string;
+  messageAr: string;
 }
 
 export interface ResolvedBuild {
@@ -59,6 +60,7 @@ export function checkCompatibility(b: ResolvedBuild): Issue[] {
     issues.push({
       level: "error",
       message: `Socket mismatch: ${cpu.name} is ${cpu.socket} but ${motherboard.name} is ${motherboard.socket}.`,
+      messageAr: `عدم تطابق المقبس: ${cpu.name} يستخدم ${cpu.socket} بينما ${motherboard.name} يستخدم ${motherboard.socket}.`,
     });
   }
 
@@ -66,6 +68,7 @@ export function checkCompatibility(b: ResolvedBuild): Issue[] {
     issues.push({
       level: "error",
       message: `Memory mismatch: ${ram.memoryType} modules cannot fit a ${motherboard.memoryType} motherboard.`,
+      messageAr: `عدم تطابق الذاكرة: شرائح ${ram.memoryType} لا تعمل مع لوحة أم من نوع ${motherboard.memoryType}.`,
     });
   }
 
@@ -73,6 +76,7 @@ export function checkCompatibility(b: ResolvedBuild): Issue[] {
     issues.push({
       level: "error",
       message: `${cpu.name} does not support ${ram.memoryType} memory.`,
+      messageAr: `المعالج ${cpu.name} لا يدعم ذاكرة ${ram.memoryType}.`,
     });
   }
 
@@ -80,6 +84,7 @@ export function checkCompatibility(b: ResolvedBuild): Issue[] {
     issues.push({
       level: "error",
       message: `${ram.name} needs ${ram.modules} slots, board has ${motherboard.memorySlots}.`,
+      messageAr: `${ram.name} تحتاج ${ram.modules} منافذ، واللوحة توفّر ${motherboard.memorySlots} فقط.`,
     });
   }
 
@@ -87,6 +92,7 @@ export function checkCompatibility(b: ResolvedBuild): Issue[] {
     issues.push({
       level: "error",
       message: `${pcCase.name} does not support ${motherboard.formFactor} motherboards.`,
+      messageAr: `الصندوق ${pcCase.name} لا يدعم اللوحات من قياس ${motherboard.formFactor}.`,
     });
   }
 
@@ -94,6 +100,7 @@ export function checkCompatibility(b: ResolvedBuild): Issue[] {
     issues.push({
       level: "error",
       message: `${gpu.name} is ${gpu.lengthMm}mm long, ${pcCase.name} fits up to ${pcCase.maxGpuLengthMm}mm.`,
+      messageAr: `طول ${gpu.name} هو ${gpu.lengthMm} ملم، بينما ${pcCase.name} يتسع حتى ${pcCase.maxGpuLengthMm} ملم.`,
     });
   }
 
@@ -101,6 +108,7 @@ export function checkCompatibility(b: ResolvedBuild): Issue[] {
     issues.push({
       level: "error",
       message: `${cooler.name} is ${cooler.heightMm}mm tall, ${pcCase.name} clears only ${pcCase.maxCoolerHeightMm}mm.`,
+      messageAr: `ارتفاع ${cooler.name} هو ${cooler.heightMm} ملم، و${pcCase.name} يسمح بـ ${pcCase.maxCoolerHeightMm} ملم فقط.`,
     });
   }
 
@@ -108,6 +116,7 @@ export function checkCompatibility(b: ResolvedBuild): Issue[] {
     issues.push({
       level: "error",
       message: `${cooler.name} has no mounting kit for ${cpu.socket}.`,
+      messageAr: `${cooler.name} لا يحتوي على قاعدة تثبيت لمقبس ${cpu.socket}.`,
     });
   }
 
@@ -115,6 +124,7 @@ export function checkCompatibility(b: ResolvedBuild): Issue[] {
     issues.push({
       level: "warning",
       message: `${cooler.name} (${cooler.coolingCapacity}W) may throttle ${cpu.name} (${cpu.tdp}W).`,
+      messageAr: `${cooler.name} بقدرة ${cooler.coolingCapacity} واط قد يخفض أداء ${cpu.name} (${cpu.tdp} واط).`,
     });
   }
 
@@ -122,6 +132,7 @@ export function checkCompatibility(b: ResolvedBuild): Issue[] {
     issues.push({
       level: "warning",
       message: `${cpu.name} ships without a cooler — add one.`,
+      messageAr: `المعالج ${cpu.name} يأتي بدون مبرّد — يُنصح بإضافة مبرّد.`,
     });
   }
 
@@ -131,27 +142,38 @@ export function checkCompatibility(b: ResolvedBuild): Issue[] {
       issues.push({
         level: "error",
         message: `${psu.wattage}W supply is below the estimated ${watts}W load.`,
+        messageAr: `مزوّد طاقة بقدرة ${psu.wattage} واط أقل من الاستهلاك التقديري ${watts} واط.`,
       });
     } else if (psu.wattage < recommendedPsu(watts)) {
       issues.push({
         level: "warning",
         message: `${psu.wattage}W works but ${recommendedPsu(watts)}W is recommended for transient spikes.`,
+        messageAr: `${psu.wattage} واط كافية لكن يُنصح بـ ${recommendedPsu(watts)} واط لتحمّل الارتفاعات المفاجئة.`,
       });
     }
   }
 
   if (ram && ram.capacity < 16) {
-    issues.push({ level: "warning", message: "16GB or more is recommended for modern games." });
+    issues.push({
+      level: "warning",
+      message: "16GB or more is recommended for modern games.",
+      messageAr: "يُنصح بـ 16 جيجابايت أو أكثر للألعاب الحديثة.",
+    });
   }
 
   if (!b.storage) {
-    issues.push({ level: "info", message: "No storage selected — pick an NVMe SSD for fast loads." });
+    issues.push({
+      level: "info",
+      message: "No storage selected — pick an NVMe SSD for fast loads.",
+      messageAr: "لم يتم اختيار وحدة تخزين — اختر قرص NVMe SSD لتحميل أسرع.",
+    });
   }
 
   if (gpu && cpu && gpu.gpuScore > cpu.cpuScore * 1.6) {
     issues.push({
       level: "warning",
       message: `CPU bottleneck likely: ${cpu.name} may hold back ${gpu.name} at 1080p.`,
+      messageAr: `اختناق محتمل في المعالج: ${cpu.name} قد يحدّ من أداء ${gpu.name} عند دقة 1080p.`,
     });
   }
 
@@ -159,6 +181,7 @@ export function checkCompatibility(b: ResolvedBuild): Issue[] {
     issues.push({
       level: "info",
       message: `GPU is the limiting part in this build — a faster card would scale better.`,
+      messageAr: `بطاقة الرسومات هي العنصر المحدِّد في هذه التجميعة — بطاقة أقوى ستعطي أداءً أفضل.`,
     });
   }
 
@@ -169,4 +192,19 @@ export function buildStatus(issues: Issue[]): "error" | "warning" | "ok" {
   if (issues.some((i) => i.level === "error")) return "error";
   if (issues.some((i) => i.level === "warning")) return "warning";
   return "ok";
+}
+
+/**
+ * True when adding `part` to the current build introduces no new hard conflict.
+ * Used to hide/flag incompatible options in the part browser.
+ */
+export function isPartCompatible(part: Part, resolved: ResolvedBuild): boolean {
+  const base: ResolvedBuild = { ...resolved };
+  delete base[part.category as keyof ResolvedBuild];
+  const baseErrors = checkCompatibility(base).filter((i) => i.level === "error").length;
+  const withPart = checkCompatibility({
+    ...base,
+    [part.category]: part,
+  } as ResolvedBuild).filter((i) => i.level === "error").length;
+  return withPart <= baseErrors;
 }
