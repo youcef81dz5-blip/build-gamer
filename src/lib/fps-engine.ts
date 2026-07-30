@@ -75,11 +75,23 @@ export function estimateFps(
   return { fps, limitedBy, tier };
 }
 
-export function bottleneckSummary(build: ResolvedBuild): string | null {
+export function bottleneckSummary(build: ResolvedBuild): { en: string; ar: string } | null {
   const { cpu, gpu } = build;
   if (!cpu || !gpu) return null;
   const ratio = gpu.gpuScore / cpu.cpuScore;
-  if (ratio > 1.6) return `CPU bottleneck detected — ${cpu.name} limits ${gpu.name} at lower resolutions.`;
-  if (ratio < 0.45) return `GPU bottleneck detected — ${gpu.name} is the weak link for ${cpu.name}.`;
-  return "Balanced build — CPU and GPU are well matched.";
+  if (ratio > 1.6)
+    return {
+      en: `CPU bottleneck detected — ${cpu.name} limits ${gpu.name} at lower resolutions.`,
+      ar: `تم رصد اختناق في المعالج — ${cpu.name} يحدّ من ${gpu.name} عند الدقات المنخفضة.`,
+    };
+  if (ratio < 0.45)
+    return {
+      en: `GPU bottleneck detected — ${gpu.name} is the weak link for ${cpu.name}.`,
+      ar: `تم رصد اختناق في بطاقة الرسومات — ${gpu.name} هي الحلقة الأضعف مع ${cpu.name}.`,
+    };
+  return {
+    en: "Balanced build — CPU and GPU are well matched.",
+    ar: "تجميعة متوازنة — المعالج وبطاقة الرسومات متناسبان.",
+  };
 }
+
