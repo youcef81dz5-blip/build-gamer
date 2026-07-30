@@ -8,16 +8,17 @@ export type Category =
   | "cooler"
   | "case";
 
-export const CATEGORIES: { id: Category; label: string }[] = [
-  { id: "cpu", label: "Processor" },
-  { id: "gpu", label: "Graphics Card" },
-  { id: "motherboard", label: "Motherboard" },
-  { id: "ram", label: "Memory" },
-  { id: "storage", label: "Storage" },
-  { id: "psu", label: "Power Supply" },
-  { id: "cooler", label: "CPU Cooler" },
-  { id: "case", label: "Case" },
+export const CATEGORIES: { id: Category; label: string; labelAr: string }[] = [
+  { id: "cpu", label: "Processor", labelAr: "المعالج" },
+  { id: "gpu", label: "Graphics Card", labelAr: "بطاقة الرسومات" },
+  { id: "motherboard", label: "Motherboard", labelAr: "اللوحة الأم" },
+  { id: "ram", label: "Memory", labelAr: "الذاكرة العشوائية" },
+  { id: "storage", label: "Storage", labelAr: "التخزين" },
+  { id: "psu", label: "Power Supply", labelAr: "مزوّد الطاقة" },
+  { id: "cooler", label: "CPU Cooler", labelAr: "مبرّد المعالج" },
+  { id: "case", label: "Case", labelAr: "الصندوق" },
 ];
+
 
 export type Socket = "AM5" | "AM4" | "LGA1700" | "LGA1851";
 export type MemoryType = "DDR4" | "DDR5";
