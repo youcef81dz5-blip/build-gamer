@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Gauge, Cpu, MonitorPlay } from "lucide-react";
 import { motion } from "motion/react";
 import type { ResolvedBuild } from "@/lib/compatibility";
+import { useLang } from "@/lib/i18n";
 import {
   GAMES,
   bottleneckSummary,
@@ -21,6 +22,7 @@ const TIER_COLOR: Record<string, string> = {
 };
 
 export function FpsEstimator({ build }: { build: ResolvedBuild }) {
+  const { lang, t } = useLang();
   const [resolution, setResolution] = useState<Resolution>("1440p");
   const [preset, setPreset] = useState<Preset>("High");
   const [filter, setFilter] = useState<"All" | "AAA" | "Esports">("All");
@@ -31,12 +33,23 @@ export function FpsEstimator({ build }: { build: ResolvedBuild }) {
   );
   const bottleneck = bottleneckSummary(build);
 
+  const presetLabel: Record<Preset, string> = {
+    Ultra: t("presetUltra"),
+    High: t("presetHigh"),
+    Medium: t("presetMedium"),
+  };
+  const filterLabel: Record<"All" | "AAA" | "Esports", string> = {
+    All: t("filterAll"),
+    AAA: t("filterAAA"),
+    Esports: t("filterEsports"),
+  };
+
   return (
     <section className="panel p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="text-xs uppercase tracking-[0.25em] text-accent">Module 02</p>
-          <h2 className="text-2xl font-bold">Game Performance Estimator</h2>
+          <p className="text-xs uppercase tracking-[0.25em] text-accent">{t("module02")}</p>
+          <h2 className="text-2xl font-bold">{t("fpsTitle")}</h2>
         </div>
         <div className="flex flex-wrap gap-2">
           {RESOLUTIONS.map((r) => (
@@ -50,13 +63,13 @@ export function FpsEstimator({ build }: { build: ResolvedBuild }) {
       <div className="mt-4 flex flex-wrap gap-2">
         {PRESETS.map((p) => (
           <Toggle key={p} active={preset === p} onClick={() => setPreset(p)} tone="accent">
-            {p}
+            {presetLabel[p]}
           </Toggle>
         ))}
         <span className="mx-1 h-6 w-px bg-border" />
         {(["All", "AAA", "Esports"] as const).map((f) => (
           <Toggle key={f} active={filter === f} onClick={() => setFilter(f)} tone="muted">
-            {f}
+            {filterLabel[f]}
           </Toggle>
         ))}
       </div>
@@ -64,13 +77,13 @@ export function FpsEstimator({ build }: { build: ResolvedBuild }) {
       {bottleneck && (
         <div className="mt-4 flex items-start gap-2 rounded-lg border border-border bg-surface/60 px-4 py-3 text-sm">
           <Gauge className="mt-0.5 size-4 shrink-0 text-accent" />
-          <span>{bottleneck}</span>
+          <span>{bottleneck[lang]}</span>
         </div>
       )}
 
       {!build.cpu || !build.gpu ? (
         <p className="mt-6 rounded-lg border border-dashed border-border px-4 py-10 text-center text-sm text-muted-foreground">
-          Select a CPU and a graphics card to unlock FPS predictions.
+          {t("needCpuGpu")}
         </p>
       ) : (
         <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -88,7 +101,7 @@ export function FpsEstimator({ build }: { build: ResolvedBuild }) {
                   <div>
                     <h3 className="text-base font-semibold">{game.title}</h3>
                     <p className="text-xs uppercase tracking-widest text-muted-foreground">
-                      {game.genre}
+                      {filterLabel[game.genre]}
                     </p>
                   </div>
                   <span
@@ -101,10 +114,10 @@ export function FpsEstimator({ build }: { build: ResolvedBuild }) {
                   <span className={`font-display text-4xl font-bold ${TIER_COLOR[result.tier]}`}>
                     {result.fps}
                   </span>
-                  <span className="pb-1 text-sm text-muted-foreground">FPS</span>
+                  <span className="pb-1 text-sm text-muted-foreground">{t("fpsUnit")}</span>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {resolution} · {preset} preset
+                  {resolution} · {presetLabel[preset]} {t("preset")}
                 </p>
 
                 <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-background">
@@ -123,7 +136,7 @@ export function FpsEstimator({ build }: { build: ResolvedBuild }) {
                   ) : (
                     <MonitorPlay className="size-3.5" />
                   )}
-                  Limited by {result.limitedBy}
+                  {t("limitedBy")} {result.limitedBy}
                 </p>
               </motion.article>
             );
