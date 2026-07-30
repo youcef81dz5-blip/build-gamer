@@ -1,12 +1,15 @@
 import { AlertTriangle, CheckCircle2, Info, XCircle } from "lucide-react";
 import type { Issue } from "@/lib/compatibility";
+import { useLang } from "@/lib/i18n";
 
 export function CompatibilityPanel({ issues }: { issues: Issue[] }) {
+  const { lang, t } = useLang();
+
   if (issues.length === 0) {
     return (
       <div className="flex items-center gap-2 rounded-lg border border-[color-mix(in_oklab,var(--success)_50%,transparent)] bg-surface/60 px-4 py-3 text-sm">
         <CheckCircle2 className="size-4 text-success" />
-        No compatibility issues detected.
+        {t("noIssues")}
       </div>
     );
   }
@@ -28,7 +31,7 @@ export function CompatibilityPanel({ issues }: { issues: Issue[] }) {
             className="flex items-start gap-2 rounded-lg border border-border bg-surface/60 px-4 py-3 text-sm"
           >
             <Icon className={`mt-0.5 size-4 shrink-0 ${color}`} />
-            <span>{issue.message}</span>
+            <span>{lang === "ar" ? issue.messageAr : issue.message}</span>
           </li>
         );
       })}
