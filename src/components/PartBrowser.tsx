@@ -56,6 +56,7 @@ export function PartBrowser({ category, label, selectedId, build, onSelect, onCl
           <div>
             <p className="text-xs uppercase tracking-[0.25em] text-primary">{t("choose")}</p>
             <h2 className="text-xl font-bold">{label}</h2>
+            <p className="mt-1 text-[11px] text-muted-foreground">{priceUpdatedLabel(lang)}</p>
           </div>
           <button
             onClick={onClose}
