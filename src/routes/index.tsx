@@ -44,9 +44,8 @@ const ICONS: Record<Category, typeof Cpu> = {
 };
 
 export const Route = createFileRoute("/")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    b: typeof search.b === "string" ? search.b : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { b?: string } =>
+    typeof search.b === "string" ? { b: search.b } : {},
   head: () => ({
     meta: [
       { title: "نيونفورج — تجميع حاسب الألعاب ومقدّر الإطارات" },
