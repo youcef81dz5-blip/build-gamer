@@ -1,6 +1,12 @@
 import { useMemo, useState } from "react";
 import { Check, Search, Star, X } from "lucide-react";
-import { formatPrice, partsFor, type Category, type Part } from "@/lib/parts-data";
+import {
+  formatPrice,
+  partsFor,
+  priceUpdatedLabel,
+  type Category,
+  type Part,
+} from "@/lib/parts-data";
 import { isPartCompatible, type ResolvedBuild } from "@/lib/compatibility";
 import { useLang } from "@/lib/i18n";
 
