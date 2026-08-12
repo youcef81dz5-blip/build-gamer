@@ -339,6 +339,126 @@ const gpus: GpuPart[] = [
     upscaler: "XeSS",
     specs: ["12GB GDDR6", "XeSS 2", "Budget 1440p"],
   },
+  {
+    id: "gpu-5060",
+    name: "GeForce RTX 5060 8GB",
+    brand: "NVIDIA",
+    category: "gpu",
+    price: 98000,
+    rating: 4.3,
+    tdp: 145,
+    vram: 8,
+    lengthMm: 250,
+    gpuScore: 74,
+    rayTracing: true,
+    upscaler: "DLSS",
+    specs: ["8GB GDDR7", "DLSS 4", "1080p high refresh"],
+  },
+  {
+    id: "gpu-5060ti16",
+    name: "GeForce RTX 5060 Ti 16GB",
+    brand: "NVIDIA",
+    category: "gpu",
+    price: 155000,
+    rating: 4.5,
+    tdp: 180,
+    vram: 16,
+    lengthMm: 280,
+    gpuScore: 96,
+    rayTracing: true,
+    upscaler: "DLSS",
+    specs: ["16GB GDDR7", "DLSS 4", "1440p"],
+  },
+  {
+    id: "gpu-5070",
+    name: "GeForce RTX 5070 12GB",
+    brand: "NVIDIA",
+    category: "gpu",
+    price: 190000,
+    rating: 4.6,
+    tdp: 250,
+    vram: 12,
+    lengthMm: 300,
+    gpuScore: 126,
+    rayTracing: true,
+    upscaler: "DLSS",
+    specs: ["12GB GDDR7", "DLSS 4", "1440p ultra"],
+  },
+  {
+    id: "gpu-5070ti",
+    name: "GeForce RTX 5070 Ti 16GB",
+    brand: "NVIDIA",
+    category: "gpu",
+    price: 285000,
+    rating: 4.7,
+    tdp: 300,
+    vram: 16,
+    lengthMm: 304,
+    gpuScore: 165,
+    rayTracing: true,
+    upscaler: "DLSS",
+    specs: ["16GB GDDR7", "DLSS 4", "1440p/4K"],
+  },
+  {
+    id: "gpu-5080",
+    name: "GeForce RTX 5080 16GB",
+    brand: "NVIDIA",
+    category: "gpu",
+    price: 379000,
+    rating: 4.7,
+    tdp: 360,
+    vram: 16,
+    lengthMm: 330,
+    gpuScore: 200,
+    rayTracing: true,
+    upscaler: "DLSS",
+    specs: ["16GB GDDR7", "DLSS 4", "4K gaming"],
+  },
+  {
+    id: "gpu-9060xt",
+    name: "Radeon RX 9060 XT 16GB",
+    brand: "AMD",
+    category: "gpu",
+    price: 168000,
+    rating: 4.5,
+    tdp: 182,
+    vram: 16,
+    lengthMm: 290,
+    gpuScore: 92,
+    rayTracing: true,
+    upscaler: "FSR",
+    specs: ["16GB GDDR6", "FSR 4", "1440p value"],
+  },
+  {
+    id: "gpu-7600",
+    name: "Radeon RX 7600 8GB",
+    brand: "AMD",
+    category: "gpu",
+    price: 85000,
+    rating: 4.2,
+    tdp: 165,
+    vram: 8,
+    lengthMm: 240,
+    gpuScore: 60,
+    rayTracing: true,
+    upscaler: "FSR",
+    specs: ["8GB GDDR6", "FSR 3", "1080p"],
+  },
+  {
+    id: "gpu-3050",
+    name: "GeForce RTX 3050 8GB",
+    brand: "NVIDIA",
+    category: "gpu",
+    price: 75000,
+    rating: 3.9,
+    tdp: 130,
+    vram: 8,
+    lengthMm: 230,
+    gpuScore: 40,
+    rayTracing: true,
+    upscaler: "DLSS",
+    specs: ["8GB GDDR6", "DLSS 3", "1080p entry"],
+  },
 ];
 
 const motherboards: MotherboardPart[] = [
@@ -1070,6 +1190,26 @@ export function partsFor(category: Category): Part[] {
 }
 
 export type Build = Partial<Record<Category, string>>;
+
+/**
+ * Price policy: every price is a NEW (boxed, warranty) retail price collected from
+ * Algerian stores (Digitec, Campus Informatique, Alger/Oran retail) and is only
+ * accepted when the listing is at most two months old.
+ */
+export const PRICE_META = {
+  /** Last full market review (ISO date). */
+  updatedAt: "2026-08-12",
+  /** Oldest listing date accepted in this review. */
+  validFrom: "2026-06-12",
+  condition: "new" as const,
+  currency: "DZD",
+};
+
+export function priceUpdatedLabel(lang: "ar" | "en" = "ar"): string {
+  return lang === "ar"
+    ? "أسعار قطع جديدة · محدّثة في 12/08/2026 (آخر شهرين)"
+    : "New-part prices · reviewed 12 Aug 2026 (last 2 months)";
+}
 
 /** Algerian dinar formatting — prices reflect local retail (Alger/Oran) levels. */
 export function formatPrice(value: number, lang: "ar" | "en" = "ar"): string {
