@@ -1,6 +1,12 @@
 import { useMemo, useState } from "react";
 import { Check, Search, Star, X } from "lucide-react";
-import { formatPrice, partsFor, type Category, type Part } from "@/lib/parts-data";
+import {
+  formatPrice,
+  partsFor,
+  priceUpdatedLabel,
+  type Category,
+  type Part,
+} from "@/lib/parts-data";
 import { isPartCompatible, type ResolvedBuild } from "@/lib/compatibility";
 import { useLang } from "@/lib/i18n";
 
@@ -50,6 +56,7 @@ export function PartBrowser({ category, label, selectedId, build, onSelect, onCl
           <div>
             <p className="text-xs uppercase tracking-[0.25em] text-primary">{t("choose")}</p>
             <h2 className="text-xl font-bold">{label}</h2>
+            <p className="mt-1 text-[11px] text-muted-foreground">{priceUpdatedLabel(lang)}</p>
           </div>
           <button
             onClick={onClose}

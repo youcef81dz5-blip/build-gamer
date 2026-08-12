@@ -17,7 +17,14 @@ import {
   Languages,
 } from "lucide-react";
 import { motion } from "motion/react";
-import { CATEGORIES, PARTS_BY_ID, formatPrice, type Build, type Category } from "@/lib/parts-data";
+import {
+  CATEGORIES,
+  PARTS_BY_ID,
+  formatPrice,
+  priceUpdatedLabel,
+  type Build,
+  type Category,
+} from "@/lib/parts-data";
 import {
   buildStatus,
   checkCompatibility,
@@ -44,9 +51,8 @@ const ICONS: Record<Category, typeof Cpu> = {
 };
 
 export const Route = createFileRoute("/")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    b: typeof search.b === "string" ? search.b : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { b?: string } =>
+    typeof search.b === "string" ? { b: search.b } : {},
   head: () => ({
     meta: [
       { title: "نيونفورج — تجميع حاسب الألعاب ومقدّر الإطارات" },
@@ -212,6 +218,7 @@ function BuilderPage() {
             <p className="mt-2 text-xs text-muted-foreground">
               {t("recommendedPsu")} {recommendedPsu(watts)} {t("orHigher")}
             </p>
+            <p className="mt-1 text-[11px] text-muted-foreground">{priceUpdatedLabel(lang)}</p>
 
             <div
               className={`mt-4 rounded-lg border px-4 py-2 text-center text-sm font-bold uppercase tracking-widest ${statusStyles}`}
