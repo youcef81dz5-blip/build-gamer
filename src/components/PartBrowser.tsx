@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Check, Search, Star, X } from "lucide-react";
-import { partsFor, type Category, type Part } from "@/lib/parts-data";
+import { formatPrice, partsFor, type Category, type Part } from "@/lib/parts-data";
 import { isPartCompatible, type ResolvedBuild } from "@/lib/compatibility";
 import { useLang } from "@/lib/i18n";
 
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export function PartBrowser({ category, label, selectedId, build, onSelect, onClose }: Props) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const all = useMemo(() => partsFor(category), [category]);
   const brands = useMemo(() => [...new Set(all.map((p) => p.brand))].sort(), [all]);
   const maxPrice = useMemo(() => Math.max(...all.map((p) => p.price)), [all]);
@@ -88,13 +88,13 @@ export function PartBrowser({ category, label, selectedId, build, onSelect, onCl
           <div className="flex flex-wrap items-center gap-5 text-sm text-muted-foreground">
             <label className="flex flex-1 items-center gap-3 min-w-52">
               <span className="whitespace-nowrap">
-                {t("max")} ${budget}
+                {t("max")} {formatPrice(budget, lang)}
               </span>
               <input
                 type="range"
                 min={0}
                 max={maxPrice}
-                step={10}
+                step={500}
                 value={budget}
                 onChange={(e) => setBudget(Number(e.target.value))}
                 className="w-full accent-[var(--primary)]"
@@ -183,6 +183,7 @@ function PartRow({
   incompatibleLabel: string;
   onClick: () => void;
 }) {
+  const { lang } = useLang();
   return (
     <button
       onClick={onClick}
@@ -203,7 +204,7 @@ function PartRow({
         <p className="truncate text-xs text-muted-foreground">{part.specs.join(" · ")}</p>
       </div>
       <div className="text-end">
-        <p className="font-display text-sm text-primary">${part.price}</p>
+        <p className="font-display text-sm text-primary">{formatPrice(part.price, lang)}</p>
         <p className="flex items-center justify-end gap-1 text-xs text-muted-foreground">
           <Star className="size-3 fill-current text-warning" />
           {part.rating}

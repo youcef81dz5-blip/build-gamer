@@ -17,7 +17,7 @@ import {
   Languages,
 } from "lucide-react";
 import { motion } from "motion/react";
-import { CATEGORIES, PARTS_BY_ID, type Build, type Category } from "@/lib/parts-data";
+import { CATEGORIES, PARTS_BY_ID, formatPrice, type Build, type Category } from "@/lib/parts-data";
 import {
   buildStatus,
   checkCompatibility,
@@ -189,7 +189,11 @@ function BuilderPage() {
                         {part ? part.name : t("notSelected")}
                       </span>
                     </span>
-                    {part && <span className="font-display text-sm text-primary">${part.price}</span>}
+                    {part && (
+                      <span className="font-display text-sm text-primary">
+                        {formatPrice(part.price, lang)}
+                      </span>
+                    )}
                     <ChevronRight className="size-4 shrink-0 text-muted-foreground rtl:rotate-180" />
                   </button>
                 </motion.li>
@@ -202,7 +206,7 @@ function BuilderPage() {
           <section className="panel p-5">
             <h2 className="text-2xl font-bold">{t("buildSummary")}</h2>
             <div className="mt-4 grid grid-cols-2 gap-3">
-              <Stat label={t("totalPrice")} value={`$${price.toLocaleString()}`} />
+              <Stat label={t("totalPrice")} value={formatPrice(price, lang)} />
               <Stat label={t("estLoad")} value={`${watts} W`} icon />
             </div>
             <p className="mt-2 text-xs text-muted-foreground">
