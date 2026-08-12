@@ -17,7 +17,7 @@ import {
   Languages,
 } from "lucide-react";
 import { motion } from "motion/react";
-import { CATEGORIES, PARTS_BY_ID, type Build, type Category } from "@/lib/parts-data";
+import { CATEGORIES, PARTS_BY_ID, formatPrice, type Build, type Category } from "@/lib/parts-data";
 import {
   buildStatus,
   checkCompatibility,
